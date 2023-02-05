@@ -1,0 +1,22 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
+using namespace std;
+
+
+int main() {
+    int n,bedNum,bathNum,sum=0;
+    string type;
+    cin >> n;
+    for(int i=0;i<n;i++){
+        cin >> type >> bedNum >> bathNum;
+        sum += (bedNum*50 + bathNum*100);
+        if(type.compare("apartment")==0)
+            sum+=100;       
+    }  
+    cout << sum << endl;
+    return 0;
+}
