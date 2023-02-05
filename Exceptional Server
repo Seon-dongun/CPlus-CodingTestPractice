@@ -1,0 +1,54 @@
+#include <iostream>
+#include <exception>
+#include <string>
+#include <stdexcept>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+class Server {
+private:
+	static int load;
+public:
+	static int compute(long long A, long long B) {
+		load += 1;
+		if(A < 0) {
+			throw std::invalid_argument("A is negative");
+		}
+		vector<int> v(A, 0);
+		int real = -1, cmplx = sqrt(-1);
+		if(B == 0) throw 0;
+		real = (A/B)*real;
+		int ans = v.at(B);
+		return real + A - B*ans;
+	}
+	static int getLoad() {
+		return load;
+	}
+};
+int Server::load = 0;
+
+int main() {
+	int T; cin >> T;
+	while(T--) {
+		long long A, B;
+		cin >> A >> B;
+    // 작성 코드 시작
+        // 기본적으로 에러 처리를 위해서 try-catch문을 사용
+        try {
+            cout << Server::compute(A, B) << endl;
+        } 
+        catch (std::bad_alloc& error) { // 메모리 초과 시 에러를 잡아주는 catch문
+            cout << "Not enough memory" << endl;
+        }
+        catch (std::exception& error) { // throw문을 통해 받은 에러를 처리하는 catch문
+            cout << "Exception: " << error.what() << endl;
+        }
+        catch (...) { // 위의 두 예외 상황 이외의 에러를 처리
+            cout << "Other Exception" << endl;
+        }
+    // 작성 코드 끝
+	}
+	cout << Server::getLoad() << endl;
+	return 0;
+}
