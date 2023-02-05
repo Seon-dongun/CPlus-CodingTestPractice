@@ -1,0 +1,82 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <queue>
+#include <map>
+#include <sstream>
+using namespace std;
+int main()
+{
+    int n, q, i;
+    cin >> n >> q;
+    string temp;
+    vector<string> hrml;
+    vector<string> quer;
+    cin.ignore();
+    // 문자 입력 먹기
+    for (i = 0; i < n; i++)
+    {
+        getline(cin, temp);
+        hrml.push_back(temp);
+    }
+    for (i = 0; i < q; i++)
+    {
+        getline(cin, temp);
+        quer.push_back(temp);
+    }
+    map<string, string> m;
+    vector<string> tag;
+    for (i = 0; i < n; i++)
+    {
+        temp = hrml[i];
+        temp.erase(remove(temp.begin(), temp.end(), '\"'), temp.end());
+        temp.erase(remove(temp.begin(), temp.end(), '>'), temp.end());
+        // stringstream 이용 시 불필요한 문자인 \ 와 > 를 입력 받은 문자열에서 제거
+        if (temp.substr(0, 2) == "</")
+        {
+            tag.pop_back();
+        } /* </ 이 나온 경우 가장 최근에 tag 백터에 들어간 tag 정보를 pop. 이를 통해서 예를 들면, a.b와 관련된 정보를 모두 찾아내고 이후 a.c로 이어지는 정보를 구하기 위해서
+            a.b tag 정보를 빼고 a tag 정보에 c tag 정보를 연결해서 a.c tag 정보를 알 수 있게 됨. */
+        else
+        {
+            stringstream ss(temp);
+
+            string t1, p1, v1;
+            char ch;
+            
+            ss >> ch >> t1 >> p1 >> ch >> v1;
+            /* stringstream에서 필요한 정보를 빼낸다. 처음 ch의 경우 문자열의 <를 먹기 위해서 써주고 이후 t1은 tag 정보, p1은 attr 정보, 그 다음 ch는 = 를 먹기 위한 용도, 
+               마지막 v1은 value 정보를 저장한다. */
+               
+            string temp1 = "";
+            
+            // 가능한 tag 경우의 수를 모두 구한다
+            if (tag.size() > 0) 
+            {
+                temp1 = *tag.rbegin(); //rbegin()을 사용해서 역방향에서 vector를 접근. 따라서 vector의 맨 뒤 요소의 정보를 가져옴
+                temp1 = temp1 + "." + t1;
+            }
+            else
+                temp1 = t1;
+
+            tag.push_back(temp1); // tag 정보 push
+            m[*tag.rbegin() + "~" + p1] = v1; // tag정보+attr정보에 대응하는 value 정보를 map에다가 저장한다. 결과적으로 가능한 모든 tag+attr 정보에 대한 value 정보가 저장됨
+            while (ss) // 혹시나 attr<->value 정보가 여러 개인 경우 stringstream을 모두 다 읽을 때까지 확인해서 마저 추가해줌.
+            {
+                ss >> p1 >> ch >> v1;
+                m[*tag.rbegin() + "~" + p1] = v1;
+            }
+        }
+    }
+    // map에 저장된 tag+attr 정보를 key로서 사용하고 이에 대응하는 value 값을 출력할 수 있음
+    for (i = 0; i < q; i++) {
+        if (m.find(quer[i]) == m.end())
+            cout << "Not Found!\n";
+        else
+            cout << m[quer[i]] << endl;
+    }
+    return 0;
+}
