@@ -1,0 +1,50 @@
+#include <iostream>
+#include <deque> 
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+void printKMax(int arr[], int n, int k){
+	deque<int> subArr;
+    int max = arr[0];
+    int i = 0;                    
+    
+    while (i < k) {              
+        if (arr[i] > max) { max = arr[i]; }
+        subArr.push_back(arr[i++]);
+    }
+    cout << max << " ";
+    
+    while (i < n) {                         
+        int head = subArr[0];               
+        subArr.push_back(arr[i++]);
+        subArr.pop_front();
+
+        if (subArr[k-1] > max) { max = subArr[k-1]; }   
+
+        if (head == max) {            
+            max = subArr[0];           
+            for (auto j : subArr) {       
+                if (j > max) { max = j; }
+            }
+        }
+        cout << max << " ";   
+    }
+    cout << "\n";
+}
+
+int main(){
+  
+	int t;
+	cin >> t;
+	while(t>0) {
+		int n,k;
+    	cin >> n >> k;
+    	int arr[n];
+    	for(int i=0;i<n;i++)
+      		cin >> arr[i];
+    	printKMax(arr, n, k);
+    	t--;
+  	}
+  	return 0;
+}
