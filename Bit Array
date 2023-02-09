@@ -1,0 +1,29 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <map>
+#include <deque>
+using namespace std;
+
+
+int main() {
+    unsigned long long n,s,p,q,cal,i,k=0,v,ap=0;
+    cin >> n >> s >> p >> q;
+    cal = s;
+    v = pow(2,31);
+    for(i=0;i<n;i++){
+        cal = (cal*p+q)%v;
+        if((cal==s||cal==ap)){
+            k = i+1;
+            break;
+        }
+        ap = cal;
+    }  
+    if(i==n)
+        k = i;
+        
+    cout << k << endl;
+    return 0;
+}
