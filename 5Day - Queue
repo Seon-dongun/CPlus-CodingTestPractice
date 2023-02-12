@@ -1,0 +1,38 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <deque>
+using namespace std;
+
+void orderOne(deque<int> &q){
+    int num;
+    cin >> num;
+    q.push_back(num);
+}
+
+void orderTwo(deque<int> &q){
+    q.pop_front();
+}
+
+void orderThree(deque<int> &q){
+    cout << q.front() << endl;
+}
+
+int main() {
+    deque<int> q;
+
+    int n,order;
+    cin >> n;
+    for(int i=0;i<n;i++){
+        cin >> order;
+        if(order==1)
+            orderOne(q);
+        else if(order==2)
+            orderTwo(q);
+        else
+            orderThree(q);
+    }
+    return 0;
+}
