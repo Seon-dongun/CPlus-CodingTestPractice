@@ -1,0 +1,53 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+void append(string &v, vector<string> &stack){
+    string str;
+    cin >> str;
+    v = v+str;       
+    stack.push_back(v);
+}
+
+void Delete(string &v, vector<string> &stack){
+    int n;
+    cin >> n;
+    v.erase(v.end()-n,v.end());
+    stack.push_back(v);
+}
+
+void print(string v){
+    int n;
+    cin>> n;
+    cout << v[n-1] << endl;
+}
+
+void undo(string &v, vector<string> &stack){
+    stack.pop_back();
+    if(stack.empty())
+        v = "";
+    else
+        v = stack.back();    
+}
+
+int main() {
+    int q,command;
+    vector<string> stack;
+    string v="";
+    cin >> q;
+    for(int i=0;i<q;i++){
+        cin >> command;
+        if(command == 1)
+            append(v,stack);
+        else if(command == 2)
+            Delete(v,stack);
+        else if(command == 3)
+            print(v);
+        else
+            undo(v,stack);
+    }  
+    return 0;
+}
